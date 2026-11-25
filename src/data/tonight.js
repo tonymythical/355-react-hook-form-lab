@@ -20,7 +20,7 @@ export const PHONED_IN = [
   {
     id: "b1",
     name: "Priya Shah",
-    phone: "206-555-0142",
+    contact: { phone: "206-555-0142", email: "priya.shah@example.com" },
     partySize: 2,
     time: "6:00 pm",
     seating: "patio",
@@ -30,7 +30,7 @@ export const PHONED_IN = [
   {
     id: "b2",
     name: "Marcus Lee",
-    phone: "425-555-0188",
+    contact: { phone: "425-555-0188", email: "" },
     partySize: 6,
     time: "7:30 pm",
     seating: "indoor",

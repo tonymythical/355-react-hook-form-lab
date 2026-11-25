@@ -1,31 +1,20 @@
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 
 import { TIMES } from "../data/tonight.js";
 import RenderBadge from "./RenderBadge.jsx";
 
 function BookingForm({ onBook }) {
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [partySize, setPartySize] = useState("");
-  const [time, setTime] = useState("");
-  const [notes, setNotes] = useState("");
+  const { register, handleSubmit, reset } = useForm();
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  function saveBooking(data) {
+    console.log(JSON.stringify(data, null, 2));
     const booking = {
       id: crypto.randomUUID(),
-      name,
-      phone,
-      partySize: Number(partySize),
-      time,
-      notes,
+      ...data,
+      partySize: Number(data.partySize),
     };
     onBook(booking);
-    setName("");
-    setPhone("");
-    setPartySize("");
-    setTime("");
-    setNotes("");
+    reset();
   }
 
   return (
@@ -34,26 +23,20 @@ function BookingForm({ onBook }) {
         <h2 className="panel-title">Book a table</h2>
         <RenderBadge />
       </div>
-      <form className="booking-form" onSubmit={handleSubmit}>
+      <form className="booking-form" onSubmit={handleSubmit(saveBooking)}>
         <div className="field">
           <label className="field-label" htmlFor="name">Name</label>
-          <input
-            id="name"
-            className="input"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
+          <input id="name" className="input" {...register("name")} />
         </div>
 
         <div className="field">
           <label className="field-label" htmlFor="phone">Phone</label>
-          <input
-            id="phone"
-            className="input"
-            type="tel"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-          />
+          <input id="phone" className="input" type="tel" {...register("contact.phone")} />
+        </div>
+
+        <div className="field">
+          <label className="field-label" htmlFor="email">Email</label>
+          <input id="email" className="input" type="email" {...register("contact.email")} />
         </div>
 
         <div className="field-row">
@@ -65,19 +48,13 @@ function BookingForm({ onBook }) {
               type="number"
               min="1"
               max="12"
-              value={partySize}
-              onChange={(e) => setPartySize(e.target.value)}
+              {...register("partySize")}
             />
           </div>
 
           <div className="field">
             <label className="field-label" htmlFor="time">Time</label>
-            <select
-              id="time"
-              className="input"
-              value={time}
-              onChange={(e) => setTime(e.target.value)}
-            >
+            <select id="time" className="input" {...register("time")}>
               <option value="">Choose a time</option>
               {TIMES.map((t) => (
                 <option key={t} value={t}>
@@ -89,14 +66,31 @@ function BookingForm({ onBook }) {
         </div>
 
         <div className="field">
+          <span className="field-label">Seating</span>
+          <div className="choices">
+            <label className="choice">
+              <input type="radio" value="indoor" {...register("seating")} />
+              Indoor
+            </label>
+            <label className="choice">
+              <input type="radio" value="patio" {...register("seating")} />
+              Patio
+            </label>
+            <label className="choice">
+              <input type="radio" value="bar" {...register("seating")} />
+              Bar
+            </label>
+          </div>
+        </div>
+
+        <label className="choice">
+          <input id="celebrating" type="checkbox" {...register("celebrating")} />
+          Celebrating something
+        </label>
+
+        <div className="field">
           <label className="field-label" htmlFor="notes">Notes</label>
-          <textarea
-            id="notes"
-            className="input"
-            rows="3"
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-          />
+          <textarea id="notes" className="input" rows="3" {...register("notes")} />
         </div>
 
         <button className="book-button">Book the table</button>

@@ -20,7 +20,8 @@ function BookingList({ bookings }) {
               <span className="booking-party">Party of {booking.partySize}</span>
             </div>
             <div className="booking-details">
-              <span>{booking.phone}</span>
+              <span>{booking.contact.phone}</span>
+              {booking.contact.email && <span>{booking.contact.email}</span>}
               {booking.seating && <span>{SEATING[booking.seating]}</span>}
               {booking.celebrating && <span className="booking-flag">Celebrating</span>}
             </div>
